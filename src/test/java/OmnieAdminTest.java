@@ -6,21 +6,19 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Sleeper;
 
-import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Condition.*;
 
-public class OmnieUserTest {
+public class OmnieAdminTest {
     String authPage = "http://less.omniecom.com/auth/signin";
     String urlToAdmin = "http://less.omniecom.com/business";
     @Before
     public void beforeTest() {
         System.setProperty("webriver.chrome.driver", "C:/Users/den/Downloads/chromedriver_win32/chromedriver.exe");
         Configuration.browser = "chrome";
+        Configuration.browserSize = "800x480";
     }
 
     @Test
@@ -28,11 +26,12 @@ public class OmnieUserTest {
         open(authPage);
         $(By.cssSelector("input[type=text]")).val("denpavluk@ukr.net");
         $(By.cssSelector("input[type=password]")).val("testtest").pressEnter();
-        $("h1").shouldHave(text("Пошук"));
-        $(By.cssSelector(".my-menu_my_admin")).hover().click();
+        $(By.cssSelector("ul.tabs_menu")).isDisplayed();
+        //$("h1").shouldHave(text("Пошук"));
+        $(By.cssSelector("a.menu-mobile-btn")).click();
         open(urlToAdmin);
         $("h1").shouldHave(text("Мої організації"));
-        System.out.println("This stage are working well");
+        System.out.println("Open admin side of omniecommerce");
     }
 
 
@@ -81,6 +80,7 @@ public class OmnieUserTest {
         $("h3").shouldHave(text("Замовник"));
     }
 
+    //Creating the service
     @Test
     public void createService() {
         AuthToAdminPage();
@@ -97,5 +97,24 @@ public class OmnieUserTest {
         $(By.xpath("/html/body/ng-component/main/ng-component/div/div[4]/div[2]/form/div/div[2]/div/div/label")).click();
         //Click the save button in the header
         $(By.cssSelector("a.confirm")).click();
+    }
+
+    //click the discount page
+    @Test
+    public void createNews(){
+        AuthToAdminPage();
+        $(By.xpath("//*[@id=\"page-newsList\"]/a")).click();
+        $(By.cssSelector("div.all_articles")).isDisplayed();
+        $(By.linkText("Додати новину")).click();
+        $(By.cssSelector("input[type=text]")).val("asd FRED asdp 12. ФБОты тыром");
+        $(By.cssSelector("textarea")).val("ssd description.ІФВВ Злолп. 14 . Фыва елор");
+        //open the calendar
+        $(By.xpath("//*[@id=\"date_news\"]")).click();
+        //Clicking the 20 date of the month
+        $(By.xpath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[4]/td[2]/a")).click();
+        //Clicking the hours field
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/ng-component/div[1]/div/div[3]/div/div/div[1]/div[2]/div[2]/label/range-select/span/span[1]/span/span[2]")).click();
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/ng-component/div[1]/div/div[3]/div/div/div[1]/div[2]/div[3]/label/range-select/span/span[1]/span/span[2]")).click();
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/ng-component/div[1]/div/div[3]/div/div/div[1]/div[2]/div[3]/label/range-select/span/span[1]/span/span[2]")).click();
     }
 }

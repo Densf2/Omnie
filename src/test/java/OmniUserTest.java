@@ -1,14 +1,26 @@
 
+
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.codeborne.selenide.Configuration;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Condition.*;
 //Created be Den Pavluk 13.02.18
 public class OmniUserTest {
+
+    @BeforeClass
+            public static void onlyOnce() {
+        //System.setProperty("driver.manage().window().setSize(new Dimension(992, 768))");
+        //Dimension dim = new Dimension("940","480");
+        //System.setProperty("driver.manage().window().setSize(dim)");
+        //Configuration.browserSize = dim;
+
+    }
     String authPage = "http://less.omniecom.com/auth/signin";
     String urlToAdmin = "http://less.omniecom.com/business";
 
