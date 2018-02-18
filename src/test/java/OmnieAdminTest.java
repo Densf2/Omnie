@@ -18,7 +18,7 @@ public class OmnieAdminTest {
     public void beforeTest() {
         System.setProperty("webriver.chrome.driver", "C:/Users/den/Downloads/chromedriver_win32/chromedriver.exe");
         Configuration.browser = "chrome";
-        Configuration.browserSize = "800x480";
+        Configuration.browserSize = "1920x1080";
     }
 
     @Test

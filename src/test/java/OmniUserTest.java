@@ -1,12 +1,13 @@
 
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.codeborne.selenide.Configuration;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
+import org.openqa.selenium.support.ui.Select;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Condition.*;
@@ -15,13 +16,13 @@ public class OmniUserTest {
 
     @BeforeClass
             public static void onlyOnce() {
-        //System.setProperty("driver.manage().window().setSize(new Dimension(992, 768))");
-        //Dimension dim = new Dimension("940","480");
-        //System.setProperty("driver.manage().window().setSize(dim)");
-        //Configuration.browserSize = dim;
+        Configuration.browserSize = "800x600";
 
     }
-    String authPage = "http://less.omniecom.com/auth/signin";
+    //The old version of code on domain
+    //String authPage = "http://less.omniecom.com/auth/signin";
+    //New domain - less
+    String authPage = "http://dev.omniecom.com/auth/signin";
     String urlToAdmin = "http://less.omniecom.com/business";
 
     @Test
@@ -31,6 +32,9 @@ public class OmniUserTest {
         $(By.cssSelector("input[type=password]")).setValue("testtest").pressEnter();
         $(".modal-text").shouldHave(text("Такого користувача не існує"));
         $("a.confirm").click();
+        String actualTitle = $("title").innerText();
+        System.out.println("Title of authorization page is: " + actualTitle);
+        Assert.assertEquals(actualTitle, "NgFront");
         refresh();
     }
 
@@ -51,7 +55,7 @@ public class OmniUserTest {
         open(authPage);
         $(By.cssSelector("input[type=text]")).setValue("denpavluk@ukr.net");
         $(By.cssSelector("input[type=password]")).setValue("testtest").pressEnter();
-        $(".text-center h1").shouldHave(text("Пошук"));
+        $(".map_button").isDisplayed();
         $(".log_out").click();
     }
 
@@ -61,23 +65,29 @@ public class OmniUserTest {
         open(authPage);
         $(By.cssSelector("input[type=text]")).setValue("denpavluk@ukr.net");
         $(By.cssSelector("input[type=password]")).setValue("testtest").pressEnter();
-        $(".text-center h1").shouldHave(text("Пошук"));
+        if($("h1[_ngcontent-c5]").isDisplayed()) {
+            System.out.println("The screen is biggest");
+        } else {
+            $(".map_button").isDisplayed();
+            System.out.println("The screen  is smallest then 1000 px");
+        }
     }
 
     //Clicking the first organisation in list and click on the first service in list
     @Test
     public void clickingCategoryAndService() {
         authValidUser();
-        $(By.cssSelector("ul.tabs_menu li:nth-child(1)")).click();
-        $(By.cssSelector("ul.service_item_wrapper li:nth-child(1)")).click();
-        $(".scheduler_wrapper").shouldHave(text("Етапи замовлення"));
+        $(By.cssSelector(".main[_ngcontent-c8] .index_wrapper ul li:nth-child(3)")).click();
+        $(By.cssSelector("div.backg")).click();
+        //$(By.cssSelector("ul.service_item_wrapper li:nth-child(3)")).click();
+        $(By.cssSelector("a.nav-menu_category")).click();
     }
 
     //Making an order
     @Test
     public void makeOrder() {
         authValidUser();
-        $(By.cssSelector("ul.tabs_menu li:nth-child(3)")).click();
+        $(By.cssSelector(".main[_ngcontent-c5] ul.tabs_menu li:nth-child(3)")).click();
         $(By.cssSelector("ul.service_item_wrapper li:nth-child(3)")).click();
         //String categ = $(By.cssSelector("ul.service_item_wrapper li:nth-child(3) h2")).innerText();
         String categ = $(By.xpath("/html/body/ng-component/main/service-info/main/div/div/div/div[1]/div/div/h2")).getText();
@@ -165,16 +175,26 @@ public class OmniUserTest {
     @Test
     public void clickingCategories() {
         authValidUser();
-        $(By.cssSelector(".side_bar")).isDisplayed();
-        $(By.cssSelector("input[type='text']")).hover().setValue("Трускавка").pressEnter();
-        $(By.cssSelector("ul.tabs_menu")).shouldHave(text("Трускавка"));
-        $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(1)")).click();
-        $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(2)")).click();
-        $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(3)")).click();
-        $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(4)")).click();
-        $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(5)")).click();
-        $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(6)")).click();
-    }
+        //Condtition for small screen size
+        if($(By.cssSelector(".side_bar")).isDisplayed()) {
+            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(2)")).click();
+            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(3)")).click();
+            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(4)")).click();
+            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(5)")).click();
+            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(6)")).click();
+            $(By.cssSelector("input[placeholder]")).hover().setValue("Трускавка").pressEnter();
+            $(By.cssSelector("ul.tabs_menu")).shouldHave(text("Трускавка"));
+        } else {
+            //Clicking all elements in dropdownlist
+            Select dropdownCat = new Select($(By.cssSelector(".select2-hidden-accessible")));
+            dropdownCat.selectByVisibleText("Краса");
+            dropdownCat.selectByVisibleText("Медицина");
+            dropdownCat.selectByVisibleText("Спорт");
+            dropdownCat.selectByVisibleText("Транспорт");
+            dropdownCat.selectByVisibleText("Розваги");
+            dropdownCat.selectByVisibleText("Здоров`я");
+        }
+            }
 
     //Change user name
     @Test
