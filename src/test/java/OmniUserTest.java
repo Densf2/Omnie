@@ -20,10 +20,10 @@ public class OmniUserTest {
 
     }
     //The old version of code on domain
-    //String authPage = "http://less.omniecom.com/auth/signin";
+    String authPage = "http://less.omniecom.com/auth/signin";
     //New domain - less
-    String authPage = "http://dev.omniecom.com/auth/signin";
-    String urlToAdmin = "http://less.omniecom.com/business";
+    //String authPage = "http://dev.omniecom.com/auth/signin";
+    //String urlToAdmin = "http://less.omniecom.com/business";
 
     @Test
     public void userToAuthBadLogin() {
@@ -200,8 +200,11 @@ public class OmniUserTest {
     @Test
     public void changeUserName() {
         authValidUser();
-        $(By.cssSelector("a.my-menu_my_cabinet")).click();
-        $(By.cssSelector(".yellow")).shouldHave(text("Мій профіль"));
+        $(By.xpath("/html/body/ng-component/user-menu/header/div/div/div[2]/div[2]/div/div/a/i[3]")).click();
+        /*$(By.cssSelector("a.my-menu_my_cabinet")).click();
+        System.out.println("work");
+        $(By.cssSelector(".yellow")).shouldHave(text("Мій профіль"));*/
+        open("http://less.omniecom.com/client/profile");
         //Copy the used user name
         String nameUser = $(By.xpath("//*[@id=\"personal_data\"]/div/div[2]/div/div[1]/label[1]/input")).getValue();
         //Print the using name
@@ -213,7 +216,8 @@ public class OmniUserTest {
         //Click the button for saving after changing user's name
         $(By.xpath("//*[@id=\"personal_data\"]/div/div[2]/div/div[4]/div[2]/input")).click();
         refresh();
-        $(By.cssSelector("a.my-menu_my_cabinet")).click();
+        open("http://less.omniecom.com/client/profile");
+        //$(By.cssSelector("a.my-menu_my_cabinet")).click();
         $(By.cssSelector(".yellow")).shouldHave(text("Мій профіль"));
         $(By.xpath("//*[@id=\"personal_data\"]/div/div[2]/div/div[1]/label[1]/input")).clear();
         //set the old name from string to field
@@ -223,10 +227,12 @@ public class OmniUserTest {
 
     //Change user number phone and gender
     @Test
-    public void chngeGenderPhone() {
+    public void changeGenderPhone() {
         authValidUser();
-        $(By.cssSelector("a.my-menu_my_cabinet")).click();
-        $(By.cssSelector(".yellow")).shouldHave(text("Мій профіль"));
+        $(By.xpath("/html/body/ng-component/user-menu/header/div/div/div[2]/div[2]/div/div/a/i[3]")).click();
+        //$(By.cssSelector("a.my-menu_my_cabinet")).click();
+        open("http://less.omniecom.com/client/profile");
+        $(By.cssSelector("h1.yellow")).shouldHave(text("Мій профіль"));
         //set the new number phone to field
         $(By.cssSelector("input.phone")).clear();
         //$(byXpath("//*[@id=\"personal_data\"]/div/div[2]/div/div[1]/phone-input/om-inputm/label/input")).clear();
@@ -236,7 +242,8 @@ public class OmniUserTest {
         $(By.xpath("//*[@id=\"personal_data\"]/div/div[2]/div/div[2]/div/label[2]")).click();
         //click the save button for saving changes
         $(By.cssSelector("input.input_submit")).click();
-        $(By.cssSelector("a.my-menu_my_cabinet")).click();
+        open("http://less.omniecom.com/client/profile");
+        //$(By.cssSelector("a.my-menu_my_cabinet")).click();
         $(By.cssSelector(".yellow")).shouldHave(text("Мій профіль"));
         $(By.xpath("//*[@id=\"personal_data\"]/div/div[2]/div/div[2]/div/label[1]")).click();
         $(By.cssSelector("input.input_submit")).click();
@@ -247,7 +254,9 @@ public class OmniUserTest {
     public void changeSetting() {
         authValidUser();
         //click the "settings" link in the side menu
-        $(By.cssSelector("a.my-menu_my_settings")).click();
+        $(By.xpath("/html/body/ng-component/user-menu/header/div/div/div[2]/div[2]/div/div/a/i[3]")).click();
+        open("http://less.omniecom.com/client/settings");
+        //$(By.cssSelector("a.my-menu_my_settings")).click();
         $(".yellow").shouldHave(text("Налаштування"));
         //Click the 1 item of menu
         $(By.xpath("/html/body/ng-component/main/ng-component/div/div/div/ul/li[2]/settings-block/div[1]/div[2]/div/div/div")).click();
@@ -297,11 +306,9 @@ public class OmniUserTest {
         //click the date (28) of the month
         $(By.xpath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[5]/td[3]/a")).hover().click();
         //click the starus of orders
-        $(By.cssSelector("span.select2-container")).click();
-        $(By.linkText("Підтверджено організацією")).hover().click();
-        $(By.cssSelector("span.select2-container")).click();
-        //click the templates of orders
-        $(By.linkText("Мої шаблони")).click();
+        Select statusSelect = new Select($(By.cssSelector(".select2-hidden-accessible")));
+        //Choice status "Підтверджено організацією"
+        statusSelect.selectByVisibleText("Підтверджено організацією");
     }
 
     //Check the card holder on the sidebar
