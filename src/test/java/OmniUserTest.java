@@ -178,19 +178,21 @@ public class OmniUserTest {
         $(By.cssSelector(".send_message")).click();
     }
 
-    //Clicking all categories in the main list
+    //Clicking all categories in the main list and testing search categories by word
     @Test
     public void clickingCategories() {
         authValidUser();
         //Condtition for small screen size
-        //$(By.cssSelector("div.side_bar")).hover();
-        if($(By.cssSelector("div.side_bar")).isDisplayed()) {
-            //$(By.cssSelector("ul li:nth-child(2)")).click();
-            $(By.cssSelector(".side_bar ul li:nth-child(2)")).click();
-            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(3)")).click();
-            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(4)")).click();
-            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(5)")).click();
-            $(By.cssSelector("ul[_ngcontent-c8] li:nth-child(6)")).click();
+        //$$("span").findBy(text("Краса")).shouldBe(visible);
+        System.out.println("Hayku");
+        if($$("span").findBy(text("Краса")).is(visible)) {
+            System.out.println("Clicking the side bar categories");
+            $(By.cssSelector("div.side_bar ul li:nth-child(1)")).hover().click();
+            $(By.cssSelector("div.side_bar ul li:nth-child(2)")).hover().click();
+            $(By.cssSelector("div.side_bar ul li:nth-child(3)")).click();
+            $(By.cssSelector("div.side_bar ul li:nth-child(4)")).click();
+            $(By.cssSelector("div.side_bar ul li:nth-child(5)")).click();
+            $(By.cssSelector("div.side_bar ul li:nth-child(6)")).click();
             $(By.cssSelector("input[placeholder]")).hover().setValue("Трускавка").pressEnter();
             $(By.cssSelector("ul.tabs_menu")).shouldHave(text("Трускавка"));
         } else {
@@ -310,7 +312,9 @@ public class OmniUserTest {
         $(By.xpath("//*[@id=\"start_period\"]")).click();
         //$(byXpath("//*[@id=\"start_period\"]")).click();
         //click the 1 day of the month
-        $(By.xpath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[1]/td[4]/a")).click();
+        $(By.linkText("5")).hover().click();
+        //old version of clicking
+        //$(By.xpath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[1]/td[4]/a")).click();
         //$(byXpath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[1]/td[5]/a")).click();
         //click the calendar link for choosing the last day
         $(By.xpath("//*[@id=\"end_period\"]")).hover().click();
@@ -341,7 +345,7 @@ public class OmniUserTest {
         //$(By.linkText("Аеробус")).click();
         //$(By.xpath("/html/body/ng-component/main/ng-component/main/div/div[4]/div/user-gallery/div/div/div/div/div[7]")).click();
         //open the img in gallery
-        $(By.xpath("/html/body/ng-component/main/ng-component/main/div/div[4]/div/user-gallery/div/div/div/div/div[4]/img")).click();
+        $(By.xpath("/html/body/ng-component/main/ng-component/main/div/div[4]/div/user-gallery/div/div/div/div/div[5]/img")).click();
         //click the next img
         $(By.cssSelector("div.lg-next")).click();
         //close the open img
@@ -391,7 +395,7 @@ public class OmniUserTest {
         $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div/news-list/ul/li[1]/news-item/div[2]/div/p")).click();
     }
 
-    //checkh the order templates page
+    //check the order templates page
     @Test
     public void checkTemplates() {
         authValidUser();
@@ -425,5 +429,24 @@ public class OmniUserTest {
         $(By.xpath("/html/body/ng-component/main/service-info/main/div/div/div[2]/user-order/div/div[4]/div/div[6]/div/div/div[2]/a")).click();
         //Click OK button on the modal window
         $(By.xpath("/html/body/info-modal/div/div/div/div/div[2]/div/div/div/a")).click();
+    }
+
+    //Searching words on the services page
+    @Test
+    public void checkingSearch() {
+        authValidUser();
+        //click the dropdown list
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div/div[2]/div[2]/div/div[3]/label/omnie-select/span/span[1]/span/span[2]")).hover().click();
+        //Choose the link for viewing services
+        $(By.xpath("/html/body/span/span/span[2]/ul/li[2]")).click();
+        $(By.cssSelector("input")).val("Delete Trump").pressEnter();
+        //Equals the result of search to word
+        $$("li").findBy(text("Delete Trump")).shouldBe(visible);
+        //click the dropdown list
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div/div[2]/div[2]/div/div[3]/label/omnie-select/span/span[1]/span/span[2]")).hover().click();
+        //Choose the link for viewing organisation
+        $(By.xpath("/html/body/span/span/span[2]/ul/li[1]")).click();
+        $(By.cssSelector("input")).val("Pentagon").pressEnter();
+        $$("li").findBy(text("Pentagon")).shouldBe(visible);
     }
 }
