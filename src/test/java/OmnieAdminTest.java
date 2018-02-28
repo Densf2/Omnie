@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 
 import static com.codeborne.selenide.Selenide.*;
@@ -18,7 +19,7 @@ public class OmnieAdminTest {
     public void beforeTest() {
         System.setProperty("webriver.chrome.driver", "C:/Users/den/Downloads/chromedriver_win32/chromedriver.exe");
         Configuration.browser = "chrome";
-        Configuration.browserSize = "1920x1080";
+        Configuration.browserSize = "1024x768";
     }
 
     @Test
@@ -99,22 +100,152 @@ public class OmnieAdminTest {
         $(By.cssSelector("a.confirm")).click();
     }
 
-    //click the discount page
+
     @Test
-    public void createNews(){
+    public void clickTheCustomerBlackList() {
         AuthToAdminPage();
-        $(By.xpath("//*[@id=\"page-newsList\"]/a")).click();
-        $(By.cssSelector("div.all_articles")).isDisplayed();
+        $(By.cssSelector("a.nav-menu_my_customers")).click();
+        $$("h1").findBy(text("Клієнти")).shouldBe(visible);
+        $(By.linkText("Чорний список")).click();
+        $$("p").findBy(text("Чорний список клієнтів")).shouldBe(visible);
+        //Click the button for sorting date period from
+        //This part of code is not working
+        //html body.admin.admin_customers ng-component main ng-component div.container div#client_base.tabs_content.active customer-list div.row div.col-xs-12 div.clr.wraper_filter div.col-sm-6.col-lg-2 p date-input.ng-untouched.ng-pristine.ng-valid label input#dp1519725687987.calendar_input.hasDatepicker
+        //$(By.cssSelector("input.hasDatepicker")).click();
+        //$(By.linkText("5")).hover().click();
+    }
+
+    //Send the message in the admin side
+    @Test
+    public void ClickTheMesage() {
+        AuthToAdminPage();
+        String testing_word = "Testing message..///Rui Rubur Duba 123-645790 Каротьо Ьолтои Больо. Ы и торот рота - 6785-0987";
+        $(By.cssSelector("a.nav-menu_message")).click();
+        $$("h1").findBy(text("Повідомлення")).shouldBe(visible);
+        $(By.cssSelector("h2")).click();
+        //Set value in the field
+        $(By.cssSelector("textarea")).setValue(testing_word);
+        //Click the send button
+        $(By.cssSelector("a.send_message")).click();
+        $$("p").findBy(text(testing_word)).shouldBe(visible);
+    }
+
+    @Test
+    public void chickingTheRewievs() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_message")).click();
+        $(By.linkText("Відгуки")).click();
+        //Click the dropdownlist button
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[2]/div[2]/business-review/div/div[1]/div/label/omnie-select/span/span[1]/span/span[2]")).click();
+        //Choose the the link "міні кальян через мобайл"
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[2]/div[2]/business-review/div/div[1]/div/label/omnie-select/select/option[2]")).click();
+        //Choose the link "розирення 768х1024, браузер Firefox 56.0.2 (64-біт)"
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[2]/div[2]/business-review/div/div[1]/div/label/omnie-select/select/option[3]")).click();
+       /*Select selopt = new Select($(By.cssSelector("розирення 768х1024, браузер Firefox 56.0.2 (64-біт)")));
+        selopt.selectByValue("dummy");
+        //selopt.selectByVisibleText("міні кальян через мобайл");*/
+    }
+
+
+    @Test
+    public void createNewsinAdmin() {
+        AuthToAdminPage();
+        $(By.cssSelector(".nav-menu_news")).click();
+        $$("p").findBy(text("Усі новини")).shouldBe(visible);
         $(By.linkText("Додати новину")).click();
-        $(By.cssSelector("input[type=text]")).val("asd FRED asdp 12. ФБОты тыром");
-        $(By.cssSelector("textarea")).val("ssd description.ІФВВ Злолп. 14 . Фыва елор");
-        //open the calendar
-        $(By.xpath("//*[@id=\"date_news\"]")).click();
-        //Clicking the 20 date of the month
-        $(By.xpath("//*[@id=\"ui-datepicker-div\"]/table/tbody/tr[4]/td[2]/a")).click();
-        //Clicking the hours field
-        $(By.xpath("/html/body/ng-component/main/ng-component/div/ng-component/div[1]/div/div[3]/div/div/div[1]/div[2]/div[2]/label/range-select/span/span[1]/span/span[2]")).click();
-        $(By.xpath("/html/body/ng-component/main/ng-component/div/ng-component/div[1]/div/div[3]/div/div/div[1]/div[2]/div[3]/label/range-select/span/span[1]/span/span[2]")).click();
-        $(By.xpath("/html/body/ng-component/main/ng-component/div/ng-component/div[1]/div/div[3]/div/div/div[1]/div[2]/div[3]/label/range-select/span/span[1]/span/span[2]")).click();
+        $$("p").findBy(text("Додати новину")).shouldBe(visible);
+        $(By.cssSelector("input[type=text]")).val("Header of this article --TEST---");
+        $(By.cssSelector("textarea")).val("Description for this article? filling automation tools");
+        //Open the dropdown list for choose hours
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/ng-component/div[1]/div/div[3]/div/div/div[1]/div[2]/div[2]/label")).click();
+        $(By.xpath("/html/body/span/span/span[2]/ul/li[9]")).click();
+        //Open the dropdown-list for choose minutes
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/ng-component/div[1]/div/div[3]/div/div/div[1]/div[2]/div[3]/label")).click();
+        $(By.xpath("/html/body/span/span/span[2]/ul/li[20]")).click();
+        //Click the checkbox stock
+        //$(By.id("hot_news_sale")).click();
+        $(By.linkText("Зберегти")).click();
+    }
+
+
+    @Test
+    public void createNewEmployee() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_personal")).click();
+        $$("h1").findBy(text("Управління персоналом")).shouldBe(visible);
+        /*$(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div/div/div[1]/div/p/label")).click();*/
+        $(By.cssSelector("input[type=text]")).click();
+        $(By.cssSelector("input[type=text]")).val("pochta@mail.ua");
+        //click button for saving
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div/div/div[2]/div/a")).click();
+        //Change the employee position
+        $(By.cssSelector(".button_open")).click();
+        $(By.linkText("ватрушка")).click();
+    }
+
+    @Test
+    public void createNewPosition() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_personal")).click();
+        //Click button for adding position
+        $(By.cssSelector(".button_add")).click();
+        $$("p").findBy(text("Увага!")).shouldBe(visible);
+        //filling the field
+        $(By.cssSelector("div.head_table input[type=text]")).val("вантажник");
+        //Click the checkbox
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/role-manage/div[2]/div/column-table/div[2]/div[1]/ul/li[4]")).click();
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/role-manage/div[2]/div/column-table/div[2]/div[1]/ul/li[5]")).click();
+    }
+
+    @Test
+    public void clickStatistic() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_statistic")).click();
+        $$("h4").findBy(text("Замовлення")).shouldBe(visible);
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div/div[2]/div/customer-favorite-stats/div[1]/div[3]/div[1]/div[2]/div[2]/date-input/label")).click();
+        $(By.linkText("5")).click();
+        //Select the calendar last day
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div/div[2]/div/customer-favorite-stats/div[1]/div[3]/div[2]/div/div[2]/date-input/label/input")).click();
+        $(By.linkText("22")).click();
+        //Click the button for change service
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div/div[2]/div/customer-favorite-stats/div[1]/div[4]/div[1]/div/div[2]/multiple-select/div/button")).click();
+        //click the checkbox for change viewing of result
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div/div[2]/div/customer-favorite-stats/div[1]/div[4]/div[2]/ul/li[3]")).click();
+    }
+
+    @Test
+    public void clickingSideBarInStatistic() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_statistic")).click();
+        $(By.linkText("Звіти по перегляду новин")).click();
+        $(By.linkText("Звіти по даних користувачів (замовленя)")).click();
+        $(By.linkText("Продуктивність адмінів")).click();
+        $(By.linkText("Замовлення (оброблені,необроблені, відмінені)")).click();
+        $(By.linkText("i")).hover();
+        $(By.linkText("Замовлення адміністраторів")).click();
+        $(By.linkText("Відгуки")).click();
+        /*$(By.xpath("/html/body/ng-component/main/ng-component/div/div/div[2]/div/stats-customer-review/div[1]/div[3]/div[1]/div[2]/div[2]/date-input/label")).click();
+        //Choose the date
+        $(By.linkText("6")).click();
+        //Open the calendar
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div/div[2]/div/stats-customer-review/div[1]/div[3]/div[2]/div/div[2]/date-input/label")).click();
+        //Choose the last day in calendar
+        $(By.linkText("23")).click();*/
+    }
+
+    @Test
+    public void createTheDiscount() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_sale")).click();
+        $$("h1").findBy(text("Знижки")).shouldBe(visible);
+        $(By.cssSelector("input[type=text]")).val("Header of discount");
+        $(By.cssSelector("input[type=number]")).val("10");
+        //Choose the end date
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/discount-form/div[1]/div/div[2]/div[3]/div[2]/label/date-input/label/input")).click();
+        $(By.linkText("14")).click();
+        $(By.cssSelector(".legend_block")).click();
+        //Click the button for add clients
+        $(By.linkText("Вибрати клієнтів")).click();
+        $$("h4").findBy(text("Додати клієнта")).shouldBe(visible);
     }
 }

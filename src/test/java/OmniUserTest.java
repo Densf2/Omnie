@@ -10,6 +10,8 @@ import com.codeborne.selenide.Configuration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.Date;
+
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Condition.*;
 //Created be Den Pavluk 13.02.18
@@ -184,7 +186,7 @@ public class OmniUserTest {
         authValidUser();
         //Condtition for small screen size
         //$$("span").findBy(text("Краса")).shouldBe(visible);
-        System.out.println("Hayku");
+        System.out.println("Script running");
         if($$("span").findBy(text("Краса")).is(visible)) {
             System.out.println("Clicking the side bar categories");
             $(By.cssSelector("div.side_bar ul li:nth-child(1)")).hover().click();
@@ -418,6 +420,8 @@ public class OmniUserTest {
         } else {
             $(By.xpath("/html/body/ng-component/main/ng-component/div/div[2]/div[2]/div/order-templates/div/ul/li[1]/div[1]/div[2]/div/div/h3")).click();
         }
+        Date current = new Date();
+        System.out.println(current);
         $(By.cssSelector("a.confirm")).click();
         //<a class="ui-state-default" href="#">26</a>
         $(By.xpath("/html/body/modal-container/div/div/div/div/calendar/div/div/table/tbody/tr[5]/td[1]/a")).hover().click();
@@ -425,6 +429,7 @@ public class OmniUserTest {
         //Select the date - 26 of the month
         $(By.xpath("/html/body/ng-component/main/service-info/main/div/div/div[2]/user-order/div/div[3]/div[1]/div[1]/calendar/div/div/table/tbody/tr[5]/td[1]/a")).click();
         $(By.linkText("Далі")).click();
+
         $(By.xpath("/html/body/ng-component/main/service-info/main/div/div/div[2]/user-order/div/div[6]/div[2]/a")).click();
         $(By.xpath("/html/body/ng-component/main/service-info/main/div/div/div[2]/user-order/div/div[4]/div/div[6]/div/div/div[2]/a")).click();
         //Click OK button on the modal window
