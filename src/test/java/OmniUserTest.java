@@ -19,7 +19,7 @@ public class OmniUserTest {
 
     @BeforeClass
             public static void onlyOnce() {
-        Configuration.browserSize = "1024x768";
+        Configuration.browserSize = "800x600";
     }
     //The old version of code on domain
     String authPage = "http://less.omniecom.com/auth/signin";

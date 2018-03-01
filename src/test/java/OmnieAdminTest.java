@@ -248,4 +248,67 @@ public class OmnieAdminTest {
         $(By.linkText("Вибрати клієнтів")).click();
         $$("h4").findBy(text("Додати клієнта")).shouldBe(visible);
     }
+
+    @Test
+    public void editOrganization() {
+        AuthToAdminPage();
+        $$("h3").findBy(text("Кальян Shaman")).click();
+        $$("h1").findBy(text("Детальна інформація про організацію ")).shouldBe(visible);
+        //Open the map
+        $(By.cssSelector("div.map_open_button")).click();
+        $(By.linkText("OK")).click();
+        //Click the schedule
+        $(By.cssSelector("div.graph_wrapper")).click();
+    }
+
+    @Test
+    public void checkingAllServices() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_my_order")).click();
+        $$("h1").findBy(text("Замовлення")).shouldBe(visible);
+        //Click the button for show all schedule for all services
+        $(By.linkText("Показати графік для всіх послуг")).click();
+        $(By.id("calendarHor")).shouldBe(visible);
+        //Click button for show schedule by day
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[1]/horizont-timesheet/div/div/div[1]/div[2]/div/button[2]")).click();
+    }
+
+    @Test
+    public void CheckTheOrder() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_my_order")).click();
+        $$("h1").findBy(text("Замовлення")).shouldBe(visible);
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[3]/div[1]/div[1]/div[2]/omnie-select/span/span[1]/span")).click();
+        $(By.xpath("/html/body/span/span/span[2]/ul/li[4]")).click();
+        //Clcik the 5 date on the calendar
+        $(By.linkText("5")).click();
+        //Click the next month on a calendar
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[3]/div[2]/div/div[1]/calendar/div/div/div/a[2]/span")).click();
+        //Change the graphics
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[2]/div[3]/div/a[2]")).click();
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[3]/div[1]/div[1]/div[3]/span")).hover();
+    }
+
+    @Test
+    public void createTheOrderAdmin() {
+        AuthToAdminPage();
+        $(By.cssSelector("a.nav-menu_my_order")).click();
+        $$("h1").findBy(text("Замовлення")).shouldBe(visible);
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[3]/div[1]/div[1]/div[2]/omnie-select/span/span[1]/span")).click();
+        /*int date_in_calendar = Integer.parseInt($(By.cssSelector("a.ui-state-default.ui-state-active")).getText());*/
+        //Chose the link (Кальян КАЛЯН)
+        //$(By.xpath("/html/body/span/span/span[2]/ul/li[4]")).click();
+        String date_in_calendar = $(By.cssSelector("a.ui-state-default.ui-state-active")).getText();
+        System.out.println("today the date: " + date_in_calendar);
+        String one = "1";
+        date_in_calendar += one;
+        System.out.println("new date for clicking " + date_in_calendar);
+        $(By.xpath("/html/body/span/span/span[2]/ul/li[4]")).click();
+        $(By.linkText(date_in_calendar)).click();
+        $(By.cssSelector("div.buttons_wrapper a")).click();
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[3]/div[2]/div/edit-order/div[2]/div[1]/form/div/div/div/div/om-input/label/input")).val("1 input");
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[3]/div[2]/div/edit-order/div[2]/div[1]/form/div/div/div/div/div[1]/div/user-search/om-input/label/input")).val("0937999291");
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[3]/div[2]/div/edit-order/div[2]/div[7]/div/label/textarea")).val("utiepq polkookgfg `2343412ldfsnv asd;. Df ert qwer polioosdgf ");
+        $(By.xpath("/html/body/ng-component/main/ng-component/div/div[3]/div[3]/div[2]/div/edit-order/div[2]/div[11]/div[1]/div/label/input")).hover();
+    }
 }
